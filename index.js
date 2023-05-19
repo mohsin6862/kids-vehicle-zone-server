@@ -11,7 +11,7 @@ app.use(express.json())
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER_ID}:${process.env.USER_PASS}@mohsin.hrlaneq.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -30,7 +30,8 @@ async function run() {
 
     const carsCollection = client.db("kidsVehicleZoneDB").collection("carsDB")
     const truckCollection = client.db("kidsVehicleZoneDB").collection("truckDB")
-
+    const collectorsCollection = client.db("kidsVehicleZoneDB").collection("collectorsDB")
+    const allVehiclesCollection = client.db("kidsVehicleZoneDB").collection("allVehiclesDB")
     app.get('/cars',async(req,res)=>{
 
         const cursor = carsCollection.find()
@@ -41,6 +42,25 @@ async function run() {
 
         const cursor = truckCollection.find()
         const result = await cursor.toArray()
+        res.send(result)
+    })
+    app.get('/collectors',async(req,res)=>{
+
+        const cursor = collectorsCollection.find()
+        const result = await cursor.toArray()
+        res.send(result)
+    })
+
+    app.get('/allvehicles', async(req,res)=>{
+        const cursor = allVehiclesCollection.find()
+        const result = await cursor.toArray()
+        res.send(result)
+    })
+
+    app.get('/allvehicles/:id',async(req,res)=>{
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)}
+        const result= await allVehiclesCollection.findOne(query)
         res.send(result)
     })
 
