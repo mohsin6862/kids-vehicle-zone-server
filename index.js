@@ -33,6 +33,7 @@ async function run() {
     const collectorsCollection = client.db("kidsVehicleZoneDB").collection("collectorsDB")
     const allVehiclesCollection = client.db("kidsVehicleZoneDB").collection("allVehiclesDB")
     const featuredCollection = client.db("kidsVehicleZoneDB").collection("featuredDB")
+    const addVehiclesCollection = client.db("kidsVehicleZoneDB").collection("addVehiclesDB")
     app.get('/cars',async(req,res)=>{
 
         const cursor = carsCollection.find()
@@ -68,6 +69,19 @@ async function run() {
         const id = req.params.id;
         const query = {_id : new ObjectId(id)}
         const result= await allVehiclesCollection.findOne(query)
+        res.send(result)
+    })
+
+    app.get('/addvehicle', async(req,res)=>{
+        const cursor = addVehiclesCollection.find()
+        const result = await cursor.toArray()
+        res.send(result)
+    })
+
+    app.post('/addvehicle', async(req,res)=>{
+        const newVehicle = req.body
+        console.log(newVehicle)
+        const result = await addVehiclesCollection.insertOne(newVehicle);
         res.send(result)
     })
 
