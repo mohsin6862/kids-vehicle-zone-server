@@ -32,6 +32,7 @@ async function run() {
     const truckCollection = client.db("kidsVehicleZoneDB").collection("truckDB")
     const collectorsCollection = client.db("kidsVehicleZoneDB").collection("collectorsDB")
     const allVehiclesCollection = client.db("kidsVehicleZoneDB").collection("allVehiclesDB")
+    const featuredCollection = client.db("kidsVehicleZoneDB").collection("featuredDB")
     app.get('/cars',async(req,res)=>{
 
         const cursor = carsCollection.find()
@@ -47,6 +48,12 @@ async function run() {
     app.get('/collectors',async(req,res)=>{
 
         const cursor = collectorsCollection.find()
+        const result = await cursor.toArray()
+        res.send(result)
+    })
+    app.get('/featured',async(req,res)=>{
+
+        const cursor = featuredCollection.find()
         const result = await cursor.toArray()
         res.send(result)
     })
