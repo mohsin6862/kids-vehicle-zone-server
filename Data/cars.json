@@ -1,0 +1,43 @@
+[
+    {
+      "name": "Tesla Model S",
+      "price": 79900,
+      "description": "The Tesla Model S is a luxury electric sedan with cutting-edge technology and impressive performance.",
+      "stock": 10,
+      "ratings": 4.5,
+      "image": "https://example.com/tesla-model-s.jpg"
+    },
+    {
+      "name": "BMW 3 Series",
+      "price": 45900,
+      "description": "The BMW 3 Series is a sporty and elegant compact executive car known for its driving dynamics.",
+      "stock": 5,
+      "ratings": 4.2,
+      "image": "https://example.com/bmw-3-series.jpg"
+    },
+    {
+      "name": "Mercedes-Benz E-Class",
+      "price": 58900,
+      "description": "The Mercedes-Benz E-Class is a refined and luxurious midsize sedan with advanced safety features.",
+      "stock": 8,
+      "ratings": 4.7,
+      "image": "https://example.com/mercedes-e-class.jpg"
+    },
+    {
+      "name": "Audi Q5",
+      "price": 46900,
+      "description": "The Audi Q5 is a stylish and versatile compact luxury SUV with a comfortable interior.",
+      "stock": 3,
+      "ratings": 4.4,
+      "image": "https://example.com/audi-q5.jpg"
+    },
+    {
+      "name": "Ford Mustang",
+      "price": 37900,
+      "description": "The Ford Mustang is an iconic American muscle car known for its powerful performance and classic design.",
+      "stock": 6,
+      "ratings": 4.6,
+      "image": "https://example.com/ford-mustang.jpg"
+    }
+  ]
+  
