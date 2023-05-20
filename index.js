@@ -77,10 +77,10 @@ async function run() {
         const result = await cursor.toArray()
         res.send(result)
     })
-    app.get('/addveicle/:id',async(req,res)=>{
+    app.get('/addvehicle/:id',async(req,res)=>{
         const id = req.params.id;
-        const query = {_id: new ObjectId(id)} 
-        const result = await addVehiclesCollection.findOne(query)
+        const query = {_id : new ObjectId(id)}
+        const result= await addVehiclesCollection.findOne(query)
         res.send(result)
     })
 
@@ -91,6 +91,27 @@ async function run() {
         const result = await addVehiclesCollection.insertOne(newVehicle);
         res.send(result)
     })
+
+    app.put('/addvehicle/:id',async(req,res)=>{
+        const id = req.params.id;
+        const filter ={_id : new ObjectId(id)}
+        const options = { upsert: true };
+        const updatedVehicle = req.body
+        const vehicle ={
+          $set: {
+            name : updatedVehicle.name , 
+            title:  updatedVehicle.title, 
+            description :  updatedVehicle.description, 
+            price:updatedVehicle.price, 
+            ratings: updatedVehicle.ratings, 
+            stock :updatedVehicle.stock, 
+            photo: updatedVehicle.photo
+          }
+        }
+        const result = await addVehiclesCollection.updateOne(filter,vehicle,options);
+        res.send(result)
+  
+      })
 
     app.delete('/addveicle/:id',async(req,res)=>{
         const id = req.params.id;
