@@ -77,11 +77,25 @@ async function run() {
         const result = await cursor.toArray()
         res.send(result)
     })
+    app.get('/addveicle/:id',async(req,res)=>{
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)} 
+        const result = await addVehiclesCollection.findOne(query)
+        res.send(result)
+    })
+
 
     app.post('/addvehicle', async(req,res)=>{
         const newVehicle = req.body
         console.log(newVehicle)
         const result = await addVehiclesCollection.insertOne(newVehicle);
+        res.send(result)
+    })
+
+    app.delete('/addveicle/:id',async(req,res)=>{
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)} 
+        const result = await addVehiclesCollection.deleteOne(query)
         res.send(result)
     })
 
