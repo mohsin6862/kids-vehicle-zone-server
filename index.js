@@ -7,7 +7,13 @@ const port = process.env.PORT || 5000;
 
 // middleware
 
-app.use(cors());
+const corsOptions ={
+  origin:'*', 
+  credentials:true,
+  optionSuccessStatus:200,
+}
+
+app.use(cors(corsOptions))
 app.use(express.json())
 
 
@@ -27,7 +33,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const carsCollection = client.db("kidsVehicleZoneDB").collection("carsDB")
     const truckCollection = client.db("kidsVehicleZoneDB").collection("truckDB")
@@ -35,6 +41,7 @@ async function run() {
     const allVehiclesCollection = client.db("kidsVehicleZoneDB").collection("allVehiclesDB")
     const featuredCollection = client.db("kidsVehicleZoneDB").collection("featuredDB")
     const addVehiclesCollection = client.db("kidsVehicleZoneDB").collection("addVehiclesDB")
+    const hotDealsCollection = client.db("kidsVehicleZoneDB").collection("hotDealsDB")
 
     app.post('/jwt',(req,res)=>{
         const user = req.body;
@@ -43,9 +50,15 @@ async function run() {
         res.send({token})
     })
 
+    
 
 
+    app.get('/hotdeals',async(req,res)=>{
 
+        const cursor = hotDealsCollection.find()
+        const result = await cursor.toArray()
+        res.send(result)
+    })
     app.get('/cars',async(req,res)=>{
 
         const cursor = carsCollection.find()
@@ -109,11 +122,11 @@ async function run() {
 
     // add toys 
     
-    app.get('/addvehicle', async(req,res)=>{
-        const cursor = addVehiclesCollection.find()
-        const result = await cursor.toArray()
-        res.send(result)
-    })
+    // app.get('/addvehicle', async(req,res)=>{
+    //     const cursor = addVehiclesCollection.find()
+    //     const result = await cursor.toArray()
+    //     res.send(result)
+    // })
 
 
     app.get('/addvehicle/:id',async(req,res)=>{
@@ -124,15 +137,15 @@ async function run() {
     })
 
 
-    // app.get('/addvehicle', async(req,res)=>{
-    //     console.log(req.query.email)
-    //     let query={}
-    //     if(req.query?.email){
-    //         query= {email:req.query.email}
-    //     }
-    //     const result = await addVehiclesCollection.find(query).toArray();
-    //     res.send(result)
-    // })
+    app.get('/addvehicle', async(req,res)=>{
+        console.log(req.query.email)
+        let query={}
+        if(req.query?.email){
+            query= {email:req.query.email}
+        }
+        const result = await addVehiclesCollection.find(query).toArray();
+        res.send(result)
+    })
 
  
 
@@ -171,9 +184,14 @@ async function run() {
         res.send(result)
     })
 
+    app.get('/total-toys',async(req,res)=>{
+      const result =await addVehiclesCollection.estimatedDocumentCount();
+      res.send({totalVehicle:result})
+    })
+
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
