@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express()
 require('dotenv').config()
+const jwt = require('jsonwebtoken')
 const port = process.env.PORT || 5000;
 
 // middleware
@@ -34,11 +35,29 @@ async function run() {
     const allVehiclesCollection = client.db("kidsVehicleZoneDB").collection("allVehiclesDB")
     const featuredCollection = client.db("kidsVehicleZoneDB").collection("featuredDB")
     const addVehiclesCollection = client.db("kidsVehicleZoneDB").collection("addVehiclesDB")
+
+    app.post('/jwt',(req,res)=>{
+        const user = req.body;
+        console.log(user);
+        const token = jwt.sign(user,process.env.ACCESS_TOKEN_SECRET,{expiresIn: '1h'})
+        res.send({token})
+    })
+
+
+
+
     app.get('/cars',async(req,res)=>{
 
         const cursor = carsCollection.find()
         const result = await cursor.toArray()
         res.send(result)
+    })
+    app.get('/cars/:id',async(req,res)=>{
+      const id = req.params.id;
+      const query= {_id: new ObjectId(id)}
+      const result = await carsCollection.findOne(query)
+      res.send(result)
+
     })
     app.get('/truck',async(req,res)=>{
 
@@ -46,11 +65,25 @@ async function run() {
         const result = await cursor.toArray()
         res.send(result)
     })
+    app.get('/truck/:id',async(req,res)=>{
+      const id = req.params.id;
+      const query= {_id: new ObjectId(id)}
+      const result = await truckCollection.findOne(query)
+      res.send(result)
+
+    })
     app.get('/collectors',async(req,res)=>{
 
         const cursor = collectorsCollection.find()
         const result = await cursor.toArray()
         res.send(result)
+    })
+    app.get('/collectors/:id',async(req,res)=>{
+      const id = req.params.id;
+      const query= {_id: new ObjectId(id)}
+      const result = await collectorsCollection.findOne(query)
+      res.send(result)
+
     })
     app.get('/featured',async(req,res)=>{
 
@@ -71,12 +104,18 @@ async function run() {
         const result= await allVehiclesCollection.findOne(query)
         res.send(result)
     })
+ 
 
+
+    // add toys 
+    
     app.get('/addvehicle', async(req,res)=>{
         const cursor = addVehiclesCollection.find()
         const result = await cursor.toArray()
         res.send(result)
     })
+
+
     app.get('/addvehicle/:id',async(req,res)=>{
         const id = req.params.id;
         const query = {_id : new ObjectId(id)}
@@ -84,6 +123,18 @@ async function run() {
         res.send(result)
     })
 
+
+    // app.get('/addvehicle', async(req,res)=>{
+    //     console.log(req.query.email)
+    //     let query={}
+    //     if(req.query?.email){
+    //         query= {email:req.query.email}
+    //     }
+    //     const result = await addVehiclesCollection.find(query).toArray();
+    //     res.send(result)
+    // })
+
+ 
 
     app.post('/addvehicle', async(req,res)=>{
         const newVehicle = req.body
